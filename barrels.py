@@ -11,15 +11,16 @@ class Circle:
         self.y=y
         self.v=1
         self.g=1
-        self.theta=180
+        self.theta=135
         self.flying=False
+        self.blit()
     def blit(self):
         pg.draw.circle(surface,SILVER,(self.x,self.y),5)
     def draw(self):
-        circle.blit()
-        if self.x<=400 and self.flying:
-            self.y=(self.x*round(m.tan(self.theta))-self.g*self.x^2)/(2*self.v^2*round(m.cos(self.theta))^2)
-            self.x+=1
+        if True:
+            self.y=(round(self.x)*round(m.tan(self.theta))-self.g*round(self.x)^2)/(2*self.v^2*round(m.cos(self.theta))^2)
+            self.x=(round(self.y)*round(m.tan(self.theta))-self.g*round(self.y)^2)/(2*self.v^2*round(m.cos(self.theta))^2)
+            circle.blit()
 circle=Circle(400,400)
 
 running=True
