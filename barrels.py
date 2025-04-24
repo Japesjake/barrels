@@ -14,8 +14,8 @@ class Circle:
         self.sy=y
         self.x=x
         self.y=y
-        self.v=1
-        self.g=1
+        self.v=10
+        self.g=-1
         self.t=0
         self.theta=90
         self.flying=False
@@ -28,7 +28,9 @@ class Circle:
             # self.y=(round(self.x)*round(m.tan(self.theta))-self.g*round(self.x)^2)/(2*self.v^2*round(m.cos(self.theta))^2)
             # self.x=(round(self.y)*round(m.tan(self.theta))-self.g*round(self.y)^2)/(2*self.v^2*round(m.cos(self.theta))^2)
             self.t+=1
-            self.y=self.sx+self.v*self.t*m.cos(self.theta)
+            # self.y=self.sx+self.v*self.t*m.cos(self.theta)
+            # self.x=self.sy+self.v*self.t*m.sin(self.theta)
+            self.y=(self.sx+self.v*self.t)+(0.5*self.g*(self.t^2))
             circle.blit()
 
 circle=Circle(400,400)
