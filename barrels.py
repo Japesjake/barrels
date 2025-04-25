@@ -45,6 +45,8 @@ while running:
         if event.type==pg.KEYDOWN:
             if event.key==pg.K_SPACE:
                 circle.flying=True
+    pg.time.delay(5)
+    # surface.fill((0,0,0))
     circle.draw()
     pg.display.update()
-
+    # print(pg.mouse.get_pos())
