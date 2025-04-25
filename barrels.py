@@ -26,7 +26,9 @@ class Circle:
         pg.draw.circle(surface,SILVER,(self.x,self.y),5)
     def draw(self):
         if circle.launch==True:
-            # self.vy=self.sy+self.ret.x
+            self.ret.y=HEIGHT-self.ret.y
+            self.vy=(self.ret.y-self.sy)/10
+            self.vx=(self.ret.x-self.sx)/10
             self.t+=0.1
             self.x=self.sx+self.vx*self.t
             self.y=self.sy+self.vy*self.t+(0.5)*self.g*self.t**2
@@ -41,8 +43,8 @@ class Reticle:
         pg.draw.line(surface,(255,0,0),(self.x,self.y-10),(self.x,self.y+10))
         pg.draw.line(surface,(255,0,0),(self.x-10,self.y),(self.x+10,self.y))
 reticle=Reticle(-1,-1)
-circle=Circle(400,400,reticle)
-
+circle=Circle(200,400,reticle)
+circle.launch=True###delete
 running=True
 while running:
     for event in pg.event.get():
@@ -55,7 +57,8 @@ while running:
         circle.y=circle.sy
         circle.t=0
         circle.launch=False
+    print(circle.vx,circle.vy)
     surface.fill((0,0,0))
     circle.draw()
-    # reticle.draw()
+    reticle.draw()
     pg.display.update()
