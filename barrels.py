@@ -23,7 +23,7 @@ class Circle:
         pg.draw.circle(surface,SILVER,(self.x,self.y),5)
     def draw(self):
         if True:
-            self.t+=1
+            self.t+=0.1
             self.x=self.sx+self.vx*self.t
             self.y=self.sy+self.vy*self.t+(0.5)*self.g*self.t**2
             self.y=800-self.y
@@ -49,9 +49,9 @@ while running:
         if event.type==pg.KEYDOWN:
             if event.key==pg.K_SPACE:
                 circle.flying=True
-    pg.time.delay(5)
-    surface.fill((0,0,0))
+    # pg.time.delay(5)
+    # surface.fill((0,0,0))
     circle.draw()
-    reticle.draw()
+    # reticle.draw()
     pg.display.update()
     # print(pg.mouse.get_pos())
