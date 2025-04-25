@@ -20,9 +20,6 @@ class Circle:
         self.t=0
         self.theta=45
         self.flying=False
-        self.blit()
-        pg.display.update()
-    def blit(self):
         pg.draw.circle(surface,SILVER,(self.x,self.y),5)
     def draw(self):
         if True:
@@ -32,10 +29,17 @@ class Circle:
             self.y=800-self.y
             # make sure to add starting location to left of self.x on the left side.
             # self.y=self.x*m.tan(self.theta)-self.g*self.x**2/2*(self.v^2)*(m.cos(self.theta)**2)
-
-            self.blit()
-
+            pg.draw.circle(surface,SILVER,(self.x,self.y),5)
+class Reticle:
+    def __init__(self,x,y):
+        self.x=x
+        self.y=y
+    def draw(self):
+        self.x,self.y=pg.mouse.get_pos()
+        pg.draw.line(surface,(255,0,0),(self.x,self.y-10),(self.x,self.y+10))
+        pg.draw.line(surface,(255,0,0),(self.x-10,self.y),(self.x+10,self.y))
 circle=Circle(400,400)
+reticle=Reticle(-1,-1)
 
 running=True
 while running:
@@ -46,7 +50,8 @@ while running:
             if event.key==pg.K_SPACE:
                 circle.flying=True
     pg.time.delay(5)
-    # surface.fill((0,0,0))
+    surface.fill((0,0,0))
     circle.draw()
+    reticle.draw()
     pg.display.update()
     # print(pg.mouse.get_pos())
