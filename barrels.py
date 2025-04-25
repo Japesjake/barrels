@@ -1,7 +1,7 @@
 import pygame as pg
 import math as m
 import time, os
-# start_time=time.time()
+start_time=time.time()
 os.environ['SDL_VIDEO_WINDOW_POS'] = "%d,%d" % (0,100)
 pg.init()
 surface=pg.display.set_mode((800,800))
@@ -15,14 +15,15 @@ class Circle:
         self.x=x
         self.y=y
         self.v=10
-        self.g=-1
+        self.g=-0.1
         self.t=0
-        self.theta=90
+        self.theta=60
+        self.a=0
         self.flying=False
         self.blit()
         pg.display.update()
     def blit(self):
-        pg.draw.circle(surface,SILVER,(round(self.x),round(self.y)),5)
+        pg.draw.circle(surface,SILVER,(self.x,self.y),5)
     def draw(self):
         if True:
             # self.y=(round(self.x)*round(m.tan(self.theta))-self.g*round(self.x)^2)/(2*self.v^2*round(m.cos(self.theta))^2)
@@ -30,7 +31,14 @@ class Circle:
             self.t+=1
             # self.y=self.sx+self.v*self.t*m.cos(self.theta)
             # self.x=self.sy+self.v*self.t*m.sin(self.theta)
-            self.y=(self.sx+self.v*self.t)+(0.5*self.g*(self.t^2))
+            # self.y=(self.sx+self.v*self.t)+(0.5*self.g*(self.t^2))
+            # self.y=(self.v*m.sin(self.theta)*self.t)-(0.5*self.g*(self.t^2))
+            # self.x=self.v*m.cos(self.theta)*self.t
+
+            self.x=self.v*self.t+(0.5)*self.a*self.t**2
+            # make sure to add starting location to left of self.x on the left side.
+            self.y=self.x*m.tan(self.theta)-self.g*self.x**2/2*(self.v^2)*(m.cos(self.theta)**2)
+
             circle.blit()
 
 circle=Circle(400,400)
