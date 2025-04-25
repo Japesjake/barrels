@@ -14,7 +14,8 @@ class Circle:
         self.sy=y
         self.x=x
         self.y=y
-        self.v=10
+        self.vx=10
+        self.vy=10
         self.g=-1
         self.t=0
         self.theta=45
@@ -26,8 +27,9 @@ class Circle:
     def draw(self):
         if True:
             self.t+=1
-            self.x=self.v*self.t
-            self.y=self.v*self.t+(0.5)*self.g*self.t**2
+            self.x=self.sx+self.vx*self.t
+            self.y=self.sy+self.vy*self.t+(0.5)*self.g*self.t**2
+            self.y=800-self.y
             # make sure to add starting location to left of self.x on the left side.
             # self.y=self.x*m.tan(self.theta)-self.g*self.x**2/2*(self.v^2)*(m.cos(self.theta)**2)
 
