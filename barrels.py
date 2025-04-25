@@ -15,9 +15,9 @@ class Circle:
         self.x=x
         self.y=y
         self.v=10
-        self.g=-0.1
+        self.g=0.01
         self.t=0
-        self.theta=60
+        self.theta=45
         self.a=0
         self.flying=False
         self.blit()
