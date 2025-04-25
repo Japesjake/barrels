@@ -15,10 +15,9 @@ class Circle:
         self.x=x
         self.y=y
         self.v=10
-        self.g=0.01
+        self.g=-1
         self.t=0
         self.theta=45
-        self.a=0
         self.flying=False
         self.blit()
         pg.display.update()
@@ -26,20 +25,13 @@ class Circle:
         pg.draw.circle(surface,SILVER,(self.x,self.y),5)
     def draw(self):
         if True:
-            # self.y=(round(self.x)*round(m.tan(self.theta))-self.g*round(self.x)^2)/(2*self.v^2*round(m.cos(self.theta))^2)
-            # self.x=(round(self.y)*round(m.tan(self.theta))-self.g*round(self.y)^2)/(2*self.v^2*round(m.cos(self.theta))^2)
             self.t+=1
-            # self.y=self.sx+self.v*self.t*m.cos(self.theta)
-            # self.x=self.sy+self.v*self.t*m.sin(self.theta)
-            # self.y=(self.sx+self.v*self.t)+(0.5*self.g*(self.t^2))
-            # self.y=(self.v*m.sin(self.theta)*self.t)-(0.5*self.g*(self.t^2))
-            # self.x=self.v*m.cos(self.theta)*self.t
-
-            self.x=self.v*self.t+(0.5)*self.a*self.t**2
+            self.x=self.v*self.t
+            self.y=self.v*self.t+(0.5)*self.g*self.t**2
             # make sure to add starting location to left of self.x on the left side.
-            self.y=self.x*m.tan(self.theta)-self.g*self.x**2/2*(self.v^2)*(m.cos(self.theta)**2)
+            # self.y=self.x*m.tan(self.theta)-self.g*self.x**2/2*(self.v^2)*(m.cos(self.theta)**2)
 
-            circle.blit()
+            self.blit()
 
 circle=Circle(400,400)
 
