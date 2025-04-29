@@ -9,9 +9,8 @@ WIDTH=800
 HEIGHT=800
 surface=pg.display.set_mode((WIDTH,HEIGHT))
 pg.display.set_caption("Barrels")
-
 SILVER=(192,192,192)
-BLUE=(255,0,0)
+RED=(255,0,0)
 class Circle:
     def __init__(self,x,y,ret):
         self.ret=ret
@@ -63,14 +62,17 @@ class Barrel:
         self.y=rand.randint(50,HEIGHT-100)
 class Game:
     def __init__(self):
-        self.lives=1
+        self.lives=3
         self.collision=False
         self.running=True
         self.font=pg.font.SysFont(None,24)
-        self.img=self.font.render('Game Over',True,BLUE)
-    def game_over(self):
-        surface.blit(self.img,(WIDTH/2,HEIGHT/2))
-        print('gameover')
+        self.img=self.font.render('Game Over',True,RED)
+        self.game_over=False
+    def draw(self):
+        surface.blit(self.img,(WIDTH/2-50,HEIGHT/2-50))
+class Bar:
+    def __init__(self):
+        rect=pg.Rect()
 reticle=Reticle(-1,-1)
 circle=Circle(200,400,reticle)
 barrel=Barrel(300,700)
@@ -84,10 +86,14 @@ while game.running:
     if circle.launch==True and circle.t>=50:##lower 50
         circle.reset()
         circle.launch=False
+        game.collision=False
     surface.fill((0,0,0))
-    circle.draw()
-    barrel.draw()
-    reticle.draw()
+    if game.game_over==False:
+        circle.draw()
+        barrel.draw()
+        reticle.draw()
+    else: game.draw()
+
     #detect collision
     if circle.x>=barrel.x and circle.x<=barrel.x+100 and circle.y>=barrel.y and circle.y<=barrel.y+100:
         game.collision=True
@@ -95,7 +101,7 @@ while game.running:
     if game.collision==False and circle.launch==True and circle.t>50:
         game.lives-=1
         if game.lives==0:
-            game.game_over()
+            game.game_over=True
 
     
     pg.display.update()
