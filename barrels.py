@@ -2,15 +2,19 @@ import pygame as pg
 import math as m
 import random as rand
 import time, os
-start_time=time.time()
-os.environ['SDL_VIDEO_WINDOW_POS'] = "%d,%d" % (0,100)
-pg.init()
-WIDTH=800
-HEIGHT=800
-surface=pg.display.set_mode((WIDTH,HEIGHT))
-pg.display.set_caption("Barrels")
-SILVER=(192,192,192)
-RED=(255,0,0)
+#initializes game
+if True:
+    start_time=time.time()
+    os.environ['SDL_VIDEO_WINDOW_POS'] = "%d,%d" % (0,100)
+    pg.init()
+    WIDTH=800
+    HEIGHT=800
+    surface=pg.display.set_mode((WIDTH,HEIGHT))
+    pg.display.set_caption("Barrels")
+    SILVER=(192,192,192)
+    RED=(255,0,0)
+    GREEN=(0,255,0)
+    YELLOW=(225,225,0)
 class Circle:
     def __init__(self,x,y,ret):
         self.ret=ret
@@ -66,15 +70,23 @@ class Game:
         self.collision=False
         self.running=True
         self.font=pg.font.SysFont(None,24)
-        self.img=self.font.render('Game Over',True,RED)
+        self.game_over_font=self.font.render('Game Over',True,RED)
         self.game_over=False
-    def draw(self):
-        surface.blit(self.img,(WIDTH/2-50,HEIGHT/2-50))
+        self.score=0
+    def draw_game_over(self):
+        surface.blit(self.game_over_font,(WIDTH/2-50,HEIGHT/2-50))
+    def draw_score(self):
+        self.score_font=self.font.render("Score: "+str(self.score),True,YELLOW)
+        surface.blit(self.score_font,(WIDTH-70,HEIGHT-25))
+    def draw_lives(self):
+        self.lives_font=self.font.render("Lives: "+str(self.lives),True,GREEN)
+        surface.blit(self.lives_font,(0,HEIGHT-40))
 class Bar:
     def __init__(self):
         self.width=20
     def draw(self):
         pg.draw.rect(surface,RED,(0,HEIGHT-20,self.width,20))
+#creates objects
 if True:
     reticle=Reticle(-1,-1)
     circle=Circle(200,400,reticle)
@@ -82,6 +94,7 @@ if True:
     bar=Bar()
     game=Game()
 while game.running:
+    #event loop
     for event in pg.event.get():
         if event.type==pg.QUIT:
             game.running=False
@@ -94,10 +107,11 @@ while game.running:
         circle.reset()
         circle.launch=False
         game.collision=False
-    #detect collision
+    #detects collision increases score
     if circle.x>=barrel.x and circle.x<=barrel.x+100 and circle.y>=barrel.y and circle.y<=barrel.y+100:
         game.collision=True
         barrel.reset()
+        game.score+=1
     #clears board and draws everything
     surface.fill((0,0,0))
     if game.game_over==False:
@@ -105,7 +119,9 @@ while game.running:
         barrel.draw()
         reticle.draw()
         bar.draw()
-    else: game.draw()
+        game.draw_score()
+        game.draw_lives()
+    else: game.draw_game_over()
     #subtracts a life on a miss
     if game.collision==False and circle.launch==True and circle.t>50:##lower 50
         game.lives-=1
