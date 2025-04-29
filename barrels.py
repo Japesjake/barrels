@@ -27,10 +27,11 @@ class Circle:
     def draw(self):
         if circle.launch==True:
             self.ret.y=HEIGHT-self.ret.y
-            # self.vy=(self.ret.y-self.sy)/10
+            self.vy=(self.ret.y-self.sy)/10
             # self.vx=(self.ret.x-self.sx)/10
-            self.vy=10
             self.vx=10
+            # if self.ret.x<=self.x:
+            #     self.vx=-self.vx
             self.t+=0.1
             self.x=self.sx+self.vx*self.t
             self.y=self.sy+self.vy*self.t+(0.5)*self.g*self.t**2
@@ -46,14 +47,16 @@ class Reticle:
         pg.draw.line(surface,(255,0,0),(self.x-10,self.y),(self.x+10,self.y))
 class Barrel:
     def __init__(self,x,y):
-        # self.x=rand.randint(50,700)
-        # self.y=rand.randint(50,700)
-        self.x=400
-        self.y=400
+        self.x=x
+        self.y=y
         self.image=pg.image.load("barrel.png")
         self.image=pg.transform.scale(self.image,(100,100))
     def draw(self):
         surface.blit(self.image,(self.x,self.y))
+    def reset(self):
+        self.x=rand.randint(50,700)
+        self.y=rand.randint(50,700)
+
 
 reticle=Reticle(-1,-1)
 circle=Circle(200,400,reticle)
@@ -75,4 +78,7 @@ while running:
     circle.draw()
     barrel.draw()
     reticle.draw()
+    if circle.x>=barrel.x and circle.x<=barrel.x+100 and circle.y>=barrel.y and circle.y<=barrel.y+100:
+        barrel.reset()
+    
     pg.display.update()
