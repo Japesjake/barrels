@@ -1,6 +1,6 @@
 import pygame as pg
 import math as m
-import random as ran
+import random as rand
 import time, os
 start_time=time.time()
 os.environ['SDL_VIDEO_WINDOW_POS'] = "%d,%d" % (0,100)
@@ -8,7 +8,6 @@ pg.init()
 WIDTH=800
 HEIGHT=800
 surface=pg.display.set_mode((WIDTH,HEIGHT))
-barrel=pg.image.load("barrel.jpg")
 pg.display.set_caption("Barrels")
 
 SILVER=(192,192,192)
@@ -23,14 +22,15 @@ class Circle:
         self.vy=10
         self.g=-1
         self.t=0
-        self.theta=45
         self.launch=False
         pg.draw.circle(surface,SILVER,(self.x,self.y),5)
     def draw(self):
         if circle.launch==True:
             self.ret.y=HEIGHT-self.ret.y
-            self.vy=(self.ret.y-self.sy)/10
-            self.vx=(self.ret.x-self.sx)/10
+            # self.vy=(self.ret.y-self.sy)/10
+            # self.vx=(self.ret.x-self.sx)/10
+            self.vy=10
+            self.vx=10
             self.t+=0.1
             self.x=self.sx+self.vx*self.t
             self.y=self.sy+self.vy*self.t+(0.5)*self.g*self.t**2
@@ -46,11 +46,14 @@ class Reticle:
         pg.draw.line(surface,(255,0,0),(self.x-10,self.y),(self.x+10,self.y))
 class Barrel:
     def __init__(self,x,y):
-        self.x=x
-        self.y=y
-        self.image=pg.image.load("barrel.jpg")
+        # self.x=rand.randint(50,700)
+        # self.y=rand.randint(50,700)
+        self.x=400
+        self.y=400
+        self.image=pg.image.load("barrel.png")
+        self.image=pg.transform.scale(self.image,(100,100))
     def draw(self):
-        surface.blit(self.image,(100,100))
+        surface.blit(self.image,(self.x,self.y))
 
 reticle=Reticle(-1,-1)
 circle=Circle(200,400,reticle)
