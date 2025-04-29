@@ -1,5 +1,6 @@
 import pygame as pg
 import math as m
+import random as ran
 import time, os
 start_time=time.time()
 os.environ['SDL_VIDEO_WINDOW_POS'] = "%d,%d" % (0,100)
@@ -7,6 +8,7 @@ pg.init()
 WIDTH=800
 HEIGHT=800
 surface=pg.display.set_mode((WIDTH,HEIGHT))
+barrel=pg.image.load("barrel.jpg")
 pg.display.set_caption("Barrels")
 
 SILVER=(192,192,192)
@@ -42,8 +44,17 @@ class Reticle:
         self.x,self.y=pg.mouse.get_pos()
         pg.draw.line(surface,(255,0,0),(self.x,self.y-10),(self.x,self.y+10))
         pg.draw.line(surface,(255,0,0),(self.x-10,self.y),(self.x+10,self.y))
+class Barrel:
+    def __init__(self,x,y):
+        self.x=x
+        self.y=y
+        self.image=pg.image.load("barrel.jpg")
+    def draw(self):
+        surface.blit(self.image,(100,100))
+
 reticle=Reticle(-1,-1)
 circle=Circle(200,400,reticle)
+barrel=Barrel(300,700)
 circle.launch=True###delete
 running=True
 while running:
@@ -57,8 +68,8 @@ while running:
         circle.y=circle.sy
         circle.t=0
         circle.launch=False
-    print(circle.vx,circle.vy)
     surface.fill((0,0,0))
     circle.draw()
+    barrel.draw()
     reticle.draw()
     pg.display.update()
