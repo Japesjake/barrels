@@ -30,8 +30,8 @@ class Circle:
             self.vy=(self.ret.y-self.sy)/10
             # self.vx=(self.ret.x-self.sx)/10
             self.vx=10
-            # if self.ret.x<=self.x:
-            #     self.vx=-self.vx
+            if self.ret.x<=self.sx:
+                self.vx= -self.vx
             self.t+=0.1
             self.x=self.sx+self.vx*self.t
             self.y=self.sy+self.vy*self.t+(0.5)*self.g*self.t**2
@@ -54,8 +54,8 @@ class Barrel:
     def draw(self):
         surface.blit(self.image,(self.x,self.y))
     def reset(self):
-        self.x=rand.randint(50,700)
-        self.y=rand.randint(50,700)
+        self.x=rand.randint(50,HEIGHT-100)
+        self.y=rand.randint(50,WIDTH-100)
 
 
 reticle=Reticle(-1,-1)
