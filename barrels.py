@@ -72,36 +72,44 @@ class Game:
         surface.blit(self.img,(WIDTH/2-50,HEIGHT/2-50))
 class Bar:
     def __init__(self):
-        rect=pg.Rect()
-reticle=Reticle(-1,-1)
-circle=Circle(200,400,reticle)
-barrel=Barrel(300,700)
-game=Game()
+        self.width=20
+    def draw(self):
+        pg.draw.rect(surface,RED,(0,HEIGHT-20,self.width,20))
+if True:
+    reticle=Reticle(-1,-1)
+    circle=Circle(200,400,reticle)
+    barrel=Barrel(300,700)
+    bar=Bar()
+    game=Game()
 while game.running:
     for event in pg.event.get():
         if event.type==pg.QUIT:
             game.running=False
         if event.type==pg.MOUSEBUTTONDOWN:
             circle.launch=True
+    #calculates bar
+    bar.width=HEIGHT-reticle.y
+    #resets circle at time t
     if circle.launch==True and circle.t>=50:##lower 50
         circle.reset()
         circle.launch=False
         game.collision=False
+    #detect collision
+    if circle.x>=barrel.x and circle.x<=barrel.x+100 and circle.y>=barrel.y and circle.y<=barrel.y+100:
+        game.collision=True
+        barrel.reset()
+    #clears board and draws everything
     surface.fill((0,0,0))
     if game.game_over==False:
         circle.draw()
         barrel.draw()
         reticle.draw()
+        bar.draw()
     else: game.draw()
-
-    #detect collision
-    if circle.x>=barrel.x and circle.x<=barrel.x+100 and circle.y>=barrel.y and circle.y<=barrel.y+100:
-        game.collision=True
-        barrel.reset()
-    if game.collision==False and circle.launch==True and circle.t>50:
+    #subtracts a life on a miss
+    if game.collision==False and circle.launch==True and circle.t>50:##lower 50
         game.lives-=1
         if game.lives==0:
             game.game_over=True
-
     
     pg.display.update()
