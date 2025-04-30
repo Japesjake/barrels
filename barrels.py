@@ -77,10 +77,10 @@ class Game:
         surface.blit(self.game_over_font,(WIDTH/2-50,HEIGHT/2-50))
     def draw_score(self):
         self.score_font=self.font.render("Score: "+str(self.score),True,YELLOW)
-        surface.blit(self.score_font,(WIDTH-70,HEIGHT-25))
+        surface.blit(self.score_font,(0,HEIGHT-100))
     def draw_lives(self):
         self.lives_font=self.font.render("Lives: "+str(self.lives),True,GREEN)
-        surface.blit(self.lives_font,(0,HEIGHT-40))
+        surface.blit(self.lives_font,(0,HEIGHT-50))
 class Bar:
     def __init__(self):
         self.width=20
@@ -103,7 +103,7 @@ while game.running:
     #calculates bar
     bar.width=HEIGHT-reticle.y
     #resets circle at time t
-    if circle.launch==True and circle.t>=50:##lower 50
+    if circle.launch==True and circle.t>80:
         circle.reset()
         circle.launch=False
         game.collision=False
@@ -114,16 +114,17 @@ while game.running:
         game.score+=1
     #clears board and draws everything
     surface.fill((0,0,0))
+    game.draw_lives()
+    game.draw_score()
     if game.game_over==False:
         circle.draw()
         barrel.draw()
         reticle.draw()
         bar.draw()
-        game.draw_score()
-        game.draw_lives()
-    else: game.draw_game_over()
+    else: 
+        game.draw_game_over()
     #subtracts a life on a miss
-    if game.collision==False and circle.launch==True and circle.t>50:##lower 50
+    if game.collision==False and circle.launch==True and circle.t>80:
         game.lives-=1
         if game.lives==0:
             game.game_over=True
