@@ -1,3 +1,5 @@
+##Restart icon created by logisstudio - Flaticon
+##https://www.flaticon.com/free-icons/restart
 import pygame as pg
 import math as m
 import random as rand
@@ -49,6 +51,7 @@ class Reticle:
     def __init__(self,x,y):
         self.x=x
         self.y=y
+        self.click=False
     def draw(self):
         self.x,self.y=pg.mouse.get_pos()
         pg.draw.line(surface,(255,0,0),(self.x,self.y-10),(self.x,self.y+10))
@@ -64,6 +67,25 @@ class Barrel:
     def reset(self):
         self.x=rand.randint(50,WIDTH-100)
         self.y=rand.randint(50,HEIGHT-100)
+class Button:
+    def __init__(self,name,sizex,sizey,x,y):
+        self.x=x
+        self.y=y
+        self.sizex=sizex
+        self.sizey=sizey
+        self.image=pg.image.load(name)
+        self.image=pg.transform.scale(self.image,(sizex,sizey))
+    def draw(self):
+        surface.blit(self.image,(self.x,self.y))
+    def is_moused(self):
+        self.mouse=pg.mouse.get_pos()
+        self.mousex,self.mousey=self.mouse
+  
+        if self.mousex>=self.x and self.mousey>=self.y:
+            if self.mousex<=self.x+self.sizex and self.mousey<=self.y+self.sizex:
+                return True
+        return False
+        
 class Game:
     def __init__(self):
         self.lives=3
@@ -92,6 +114,7 @@ if True:
     circle=Circle(200,400,reticle)
     barrel=Barrel(300,700)
     bar=Bar()
+    restart=Button("restart.png",50,50,WIDTH/2-25,HEIGHT/2-25)
     game=Game()
 while game.running:
     #event loop
@@ -100,6 +123,7 @@ while game.running:
             game.running=False
         if event.type==pg.MOUSEBUTTONDOWN:
             circle.launch=True
+            reticle.click=True
     #calculates bar
     bar.width=HEIGHT-reticle.y
     #resets circle at time t
@@ -112,17 +136,28 @@ while game.running:
         game.collision=True
         barrel.reset()
         game.score+=1
+    
+    if restart.is_moused() and reticle.click and game.game_over==True:
+        game.game_over=False
+        circle.reset()
+        barrel.reset()
+        game.lives=3
+        game.score=0
+    if reticle.click==True: 
+        reticle.click=False
     #clears board and draws everything
-    surface.fill((0,0,0))
-    game.draw_lives()
-    game.draw_score()
-    if game.game_over==False:
-        circle.draw()
-        barrel.draw()
-        reticle.draw()
-        bar.draw()
-    else: 
-        game.draw_game_over()
+    if True:
+        surface.fill((0,0,0))
+        game.draw_lives()
+        game.draw_score()
+        if game.game_over==False:
+            circle.draw()
+            barrel.draw()
+            reticle.draw()
+            bar.draw()
+        else: 
+            game.draw_game_over()
+            restart.draw()
     #subtracts a life on a miss
     if game.collision==False and circle.launch==True and circle.t>80:
         game.lives-=1
