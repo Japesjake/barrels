@@ -115,12 +115,10 @@ class Game:
         self.high_score=self.load_score()
     def save_score(self):
         with open('high_score.p', 'wb') as file:
-            pickle.dump(self.score, file)
-            print('save'+str(self.score))
+            pickle.dump(self.high_score, file)
     def load_score(self):
         with open('high_score.p', 'rb') as file:
             data = pickle.load(file)
-            print('load'+str(data))
             return data
 class Bar:
     def __init__(self):
@@ -139,7 +137,7 @@ if True:
     lives=Text('Lives: ',GREEN,0,HEIGHT-50,game,True,'lives')
     game_over=Text('Gameover',RED,WIDTH/2-50,HEIGHT/2-50,game,False)
     high_score=Text('HighScore: ',YELLOW,0,0,game,True,'high_score')
-game.game_over=True
+# game.game_over=True
 while game.running:
     #event loop
     for event in pg.event.get():
@@ -151,7 +149,6 @@ while game.running:
             reticle.click=True
         if event.type==pg.KEYDOWN:
             game.high_score=0
-            game.save_score()
             print('KeyDown')
     #calculates bar
     bar.width=HEIGHT-reticle.y
