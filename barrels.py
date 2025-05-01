@@ -3,7 +3,7 @@
 import pygame as pg
 import math as m
 import random as rand
-import time, os
+import time, os, pickle
 #initializes game
 if True:
     start_time=time.time()
@@ -95,6 +95,15 @@ class Game:
         self.game_over_font=self.font.render('Game Over',True,RED)
         self.game_over=False
         self.score=0
+    def save_score(self):
+        with open('high_score.p', 'wb') as file:
+            pickle.dump(self.score, file)
+            print(self.score)
+    def load_score(self):
+        with open('high_score.p', 'rb') as file:
+            data = pickle.load(file)
+            print(data)
+            return data
     def draw_game_over(self):
         surface.blit(self.game_over_font,(WIDTH/2-50,HEIGHT/2-50))
     def draw_score(self):
@@ -116,6 +125,7 @@ if True:
     bar=Bar()
     restart=Button("restart.png",50,50,WIDTH/2-25,HEIGHT/2-25)
     game=Game()
+
 while game.running:
     #event loop
     for event in pg.event.get():
@@ -136,7 +146,7 @@ while game.running:
         game.collision=True
         barrel.reset()
         game.score+=1
-    
+    #detects restart button is clicked
     if restart.is_moused() and reticle.click and game.game_over==True:
         game.game_over=False
         circle.reset()
@@ -145,6 +155,8 @@ while game.running:
         game.score=0
     if reticle.click==True: 
         reticle.click=False
+    if game.game_over==True and game.score>game.load_score():
+        game.save_score()
     #clears board and draws everything
     if True:
         surface.fill((0,0,0))
