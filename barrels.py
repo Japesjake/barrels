@@ -1,5 +1,3 @@
-##Restart icon created by logisstudio - Flaticon
-##https://www.flaticon.com/free-icons/restart
 import pygame as pg
 import math as m
 import random as rand
@@ -84,8 +82,27 @@ class Button:
         if self.mousex>=self.x and self.mousey>=self.y:
             if self.mousex<=self.x+self.sizex and self.mousey<=self.y+self.sizex:
                 return True
-        return False
-        
+        return False        
+class Text:
+    def __init__(self,text,color,x,y,obj=None,integer=False,type=None):
+        self.text=text
+        self.color=color
+        self.x=x
+        self.y=y
+        self.font=pg.font.SysFont(None,24)
+        self.obj=obj
+        self.integer=integer
+        self.type=type
+    def draw(self):
+        if self.integer==True:
+            if self.type=='score': 
+                self.img=self.font.render(self.text+str(self.obj.score),True,self.color)
+            if self.type=='lives': 
+                self.img=self.font.render(self.text+str(self.obj.lives),True,self.color)
+            if self.type=='high_score':
+                self.img=self.font.render(self.text+str(self.obj.high_score),True,self.color)
+        else: self.img=self.font.render(self.text,True,self.color)
+        surface.blit(self.img,(self.x,self.y))
 class Game:
     def __init__(self):
         self.lives=3
@@ -95,23 +112,16 @@ class Game:
         self.game_over_font=self.font.render('Game Over',True,RED)
         self.game_over=False
         self.score=0
+        self.high_score=self.load_score()
     def save_score(self):
         with open('high_score.p', 'wb') as file:
             pickle.dump(self.score, file)
-            print(self.score)
+            print('save'+str(self.score))
     def load_score(self):
         with open('high_score.p', 'rb') as file:
             data = pickle.load(file)
-            print(data)
+            print('load'+str(data))
             return data
-    def draw_game_over(self):
-        surface.blit(self.game_over_font,(WIDTH/2-50,HEIGHT/2-50))
-    def draw_score(self):
-        self.score_font=self.font.render("Score: "+str(self.score),True,YELLOW)
-        surface.blit(self.score_font,(0,HEIGHT-100))
-    def draw_lives(self):
-        self.lives_font=self.font.render("Lives: "+str(self.lives),True,GREEN)
-        surface.blit(self.lives_font,(0,HEIGHT-50))
 class Bar:
     def __init__(self):
         self.width=20
@@ -125,18 +135,27 @@ if True:
     bar=Bar()
     restart=Button("restart.png",50,50,WIDTH/2-25,HEIGHT/2-25)
     game=Game()
-
+    score=Text('Score: ',YELLOW,0,HEIGHT-100,game,True,'score')
+    lives=Text('Lives: ',GREEN,0,HEIGHT-50,game,True,'lives')
+    game_over=Text('Gameover',RED,WIDTH/2-50,HEIGHT/2-50,game,False)
+    high_score=Text('HighScore: ',YELLOW,0,0,game,True,'high_score')
+game.game_over=True
 while game.running:
     #event loop
     for event in pg.event.get():
         if event.type==pg.QUIT:
+            game.save_score()
             game.running=False
         if event.type==pg.MOUSEBUTTONDOWN:
             circle.launch=True
             reticle.click=True
+        if event.type==pg.KEYDOWN:
+            game.high_score=0
+            game.save_score()
+            print('KeyDown')
     #calculates bar
     bar.width=HEIGHT-reticle.y
-    #resets circle at time t
+    #resets circle
     if circle.launch==True and circle.t>80:
         circle.reset()
         circle.launch=False
@@ -146,6 +165,8 @@ while game.running:
         game.collision=True
         barrel.reset()
         game.score+=1
+        if game.high_score<game.score:
+            game.high_score=game.score
     #detects restart button is clicked
     if restart.is_moused() and reticle.click and game.game_over==True:
         game.game_over=False
@@ -153,22 +174,26 @@ while game.running:
         barrel.reset()
         game.lives=3
         game.score=0
+    #resets click
     if reticle.click==True: 
         reticle.click=False
-    if game.game_over==True and game.score>game.load_score():
-        game.save_score()
+    #saves score on game over
+    if game.game_over==True:
+        if game.score>game.high_score:
+            game.save_score()
     #clears board and draws everything
     if True:
         surface.fill((0,0,0))
-        game.draw_lives()
-        game.draw_score()
+        score.draw()
+        lives.draw()
+        high_score.draw()
         if game.game_over==False:
             circle.draw()
             barrel.draw()
             reticle.draw()
             bar.draw()
         else: 
-            game.draw_game_over()
+            game_over.draw()
             restart.draw()
     #subtracts a life on a miss
     if game.collision==False and circle.launch==True and circle.t>80:
