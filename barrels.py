@@ -148,8 +148,9 @@ while game.running:
             circle.launch=True
             reticle.click=True
         if event.type==pg.KEYDOWN:
-            game.high_score=0
-            print('KeyDown')
+            if event.key==pg.K_ESCAPE:
+                game.high_score=0
+                print('KeyDown')
     #calculates bar
     bar.width=HEIGHT-reticle.y
     #resets circle
