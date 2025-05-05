@@ -1,3 +1,4 @@
+##Music by <a href="https://pixabay.com/users/djartmusic-46653586/?utm_source=link-attribution&utm_medium=referral&utm_campaign=music&utm_content=301284">Krzysztof Szymanski</a> from <a href="https://pixabay.com//?utm_source=link-attribution&utm_medium=referral&utm_campaign=music&utm_content=301284">Pixabay</a>
 import pygame as pg
 import math as m
 import random as rand
@@ -7,6 +8,9 @@ if True:
     start_time=time.time()
     os.environ['SDL_VIDEO_WINDOW_POS'] = "%d,%d" % (0,100)
     pg.init()
+    pg.mixer.init()
+    music=pg.mixer.music.load("background.mp3")
+    pg.mixer.music.play(-1)
     WIDTH=800
     HEIGHT=800
     surface=pg.display.set_mode((WIDTH,HEIGHT))
