@@ -16,7 +16,7 @@ if True:
     bam=pg.mixer.Sound('explosion.wav')
     game_over_sound=pg.mixer.Sound('game_over.mp3')
     WIDTH=800
-    HEIGHT=1000
+    HEIGHT=800
     surface=pg.display.set_mode((WIDTH,HEIGHT))
     pg.display.set_caption("Barrels")
     SILVER=(192,192,192)
@@ -65,8 +65,8 @@ class Reticle:
         pg.draw.line(surface,(255,0,0),(self.x-10,self.y),(self.x+10,self.y))
 class Barrel:
     def __init__(self):
-        self.x=rand.randint(50,WIDTH-100)
-        self.y=rand.randint(50,HEIGHT-100)
+        self.x=400
+        self.y=400
         self.image=pg.image.load("barrel.png")
         self.image=pg.transform.scale(self.image,(100,100))
     def draw(self):
