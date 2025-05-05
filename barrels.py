@@ -2,6 +2,7 @@
 ##<a href="https://www.flaticon.com/free-icons/music" title="music icons">Music icons created by Freepik - Flaticon</a>
 ##<a href="https://www.flaticon.com/free-icons/itunes" title="itunes icons">Itunes icons created by IconBaandar - Flaticon</a>
 ##<a href="https://www.flaticon.com/free-icons/bomb" title="bomb icons">Bomb icons created by Ylivdesign - Flaticon</a>
+####version 1.11
 import pygame as pg
 import math as m
 import random as rand
@@ -122,7 +123,7 @@ class Text:
         surface.blit(self.img,(self.x,self.y))
 class Game:
     def __init__(self):
-        self.lives=1
+        self.lives=3
         self.collision=False
         self.running=True
         self.font=pg.font.SysFont(None,24)
@@ -157,7 +158,6 @@ if True:
     game_over=Text('Gameover',RED,WIDTH/2-40,HEIGHT/2-50,game,False)
     high_score=Text('HighScore: ',YELLOW,0,0,game,True,'high_score')
     explosion=Explosion(-100,-100)
-# game.game_over=True
 while game.running:
     #event loop
     for event in pg.event.get():
@@ -197,8 +197,7 @@ while game.running:
         game.lives=3
         game.score=0
         if mute.on==True:
-            pg.mixer.music.unpause()
-
+            pg.mixer.music.play()
     #toggles music
     if mute.is_moused() and reticle.click:
         if mute.on==True:
