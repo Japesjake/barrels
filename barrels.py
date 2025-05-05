@@ -8,15 +8,15 @@ import random as rand
 import time, os, pickle
 #initializes game
 if True:
-    os.environ['SDL_VIDEO_WINDOW_POS'] = "%d,%d" % (0,100)
+    os.environ['SDL_VIDEO_WINDOW_POS'] = "%d,%d" % (0,50)
     pg.init()
     pg.mixer.init()
     music=pg.mixer.music.load("background.mp3")
-    pg.mixer.music.play(-1,fade_ms=-1)
+    pg.mixer.music.play(-1)
     bam=pg.mixer.Sound('explosion.wav')
     game_over_sound=pg.mixer.Sound('game_over.mp3')
     WIDTH=800
-    HEIGHT=800
+    HEIGHT=1000
     surface=pg.display.set_mode((WIDTH,HEIGHT))
     pg.display.set_caption("Barrels")
     SILVER=(192,192,192)
@@ -27,9 +27,9 @@ class Circle:
     def __init__(self,x,y,ret):
         self.ret=ret
         self.sx=x
-        self.sy=y
+        self.sy=HEIGHT-y
         self.x=x
-        self.y=y
+        self.y=HEIGHT-y
         self.vx=10
         self.vy=10
         self.g=-1
@@ -46,7 +46,7 @@ class Circle:
                 self.vx=10
             self.t+=0.1
             self.x=self.sx+self.vx*self.t
-            self.y=self.sy+self.vy*self.t+(0.5)*self.g*self.t**2
+            self.y=HEIGHT-self.sy+self.vy*self.t+(0.5)*self.g*self.t**2
             self.y=HEIGHT-self.y
         pg.draw.circle(surface,SILVER,(self.x,self.y),5)
     def reset(self):
@@ -122,7 +122,7 @@ class Text:
         surface.blit(self.img,(self.x,self.y))
 class Game:
     def __init__(self):
-        self.lives=3
+        self.lives=100010101
         self.collision=False
         self.running=True
         self.font=pg.font.SysFont(None,24)
