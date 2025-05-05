@@ -154,7 +154,7 @@ while game.running:
             game.save_score()
             game.running=False
         if event.type==pg.MOUSEBUTTONDOWN:
-            if mute.is_moused==False:
+            if mute.is_moused()==False:
                 circle.launch=True
             reticle.click=True
         if event.type==pg.KEYDOWN:
