@@ -1,18 +1,19 @@
 ##Music by <a href="https://pixabay.com/users/djartmusic-46653586/?utm_source=link-attribution&utm_medium=referral&utm_campaign=music&utm_content=301284">Krzysztof Szymanski</a> from <a href="https://pixabay.com//?utm_source=link-attribution&utm_medium=referral&utm_campaign=music&utm_content=301284">Pixabay</a>
 ##<a href="https://www.flaticon.com/free-icons/music" title="music icons">Music icons created by Freepik - Flaticon</a>
 ##<a href="https://www.flaticon.com/free-icons/itunes" title="itunes icons">Itunes icons created by IconBaandar - Flaticon</a>
+##<a href="https://www.flaticon.com/free-icons/bomb" title="bomb icons">Bomb icons created by Ylivdesign - Flaticon</a>
 import pygame as pg
 import math as m
 import random as rand
-import time, os, pickle
+import time, os, pickle, copy
 #initializes game
 if True:
-    start_time=time.time()
     os.environ['SDL_VIDEO_WINDOW_POS'] = "%d,%d" % (0,100)
     pg.init()
     pg.mixer.init()
     music=pg.mixer.music.load("background.mp3")
     pg.mixer.music.play(-1)
+    ##fade_ms=0
     WIDTH=800
     HEIGHT=800
     surface=pg.display.set_mode((WIDTH,HEIGHT))
@@ -71,6 +72,14 @@ class Barrel:
     def reset(self):
         self.x=rand.randint(50,WIDTH-100)
         self.y=rand.randint(50,HEIGHT-100)
+class Explosion:
+    def __init__(self,x,y):
+        self.x=x
+        self.y=y
+        self.image=pg.image.load("blast.png")
+        self.image=pg.transform.scale(self.image,(100,100))
+    def draw(self):
+        surface.blit(self.image,(self.x,self.y))
 class Button:
     def __init__(self,name,sizex,sizey,x,y):
         self.x=x
@@ -85,7 +94,6 @@ class Button:
     def is_moused(self):
         self.mouse=pg.mouse.get_pos()
         self.mousex,self.mousey=self.mouse
-  
         if self.mousex>=self.x and self.mousey>=self.y:
             if self.mousex<=self.x+self.sizex and self.mousey<=self.y+self.sizex:
                 return True
@@ -118,9 +126,9 @@ class Game:
         self.font=pg.font.SysFont(None,24)
         self.game_over_font=self.font.render('Game Over',True,RED)
         self.game_over=False
-        # self.high_score=0
         self.high_score=self.load_score()
         self.score=0
+        self.start=pg.time.get_ticks()
     def save_score(self):
         with open('high_score.p', 'wb') as file:
             pickle.dump(self.high_score, file)
@@ -146,6 +154,7 @@ if True:
     lives=Text('Lives: ',GREEN,0,HEIGHT-50,game,True,'lives')
     game_over=Text('Gameover',RED,WIDTH/2-50,HEIGHT/2-50,game,False)
     high_score=Text('HighScore: ',YELLOW,0,0,game,True,'high_score')
+    explosion=Explosion(-100,-100)
 # game.game_over=True
 while game.running:
     #event loop
@@ -168,14 +177,16 @@ while game.running:
         circle.reset()
         circle.launch=False
         game.collision=False
-    #detects collision increases score
+    #detects collision, explodes barrel, ticks time, and increases score
     if circle.x>=barrel.x and circle.x<=barrel.x+100 and circle.y>=barrel.y and circle.y<=barrel.y+100:
         game.collision=True
+        game.start=pg.time.get_ticks()
+        explosion=Explosion(barrel.x,barrel.y)
         barrel.reset()
         game.score+=1
         if game.high_score<game.score:
             game.high_score=game.score
-    #detects restart button is clicked
+    #restarts the game
     if restart.is_moused() and reticle.click and game.game_over==True:
         game.game_over=False
         circle.reset()
@@ -197,7 +208,7 @@ while game.running:
     if game.game_over==True:
         if game.score>game.high_score:
             game.save_score()
-    #clears board and draws everything
+    #############clears surface and draws everything#############
     if True:
         surface.fill((0,0,0))
         score.draw()
@@ -209,6 +220,8 @@ while game.running:
             barrel.draw()
             reticle.draw()
             bar.draw()
+            if pg.time.get_ticks()-game.start<500:
+                explosion.draw()
         else: 
             game_over.draw()
             restart.draw()
