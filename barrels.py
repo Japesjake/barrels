@@ -12,8 +12,9 @@ if True:
     pg.init()
     pg.mixer.init()
     music=pg.mixer.music.load("background.mp3")
-    pg.mixer.music.play(-1,fade_ms=0)
+    pg.mixer.music.play(-1,fade_ms=-1)
     bam=pg.mixer.Sound('explosion.wav')
+    game_over_sound=pg.mixer.Sound('game_over.mp3')
     WIDTH=800
     HEIGHT=800
     surface=pg.display.set_mode((WIDTH,HEIGHT))
@@ -224,6 +225,7 @@ while game.running:
         else: 
             game_over.draw()
             restart.draw()
+    #############################################################
     #resets click
     if reticle.click==True: 
         reticle.click=False
@@ -232,5 +234,8 @@ while game.running:
         game.lives-=1
         if game.lives==0:
             game.game_over=True
+            pg.mixer.music.pause()
+            game_over_sound.play()
+            
     
     pg.display.update()
