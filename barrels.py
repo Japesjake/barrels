@@ -196,6 +196,9 @@ while game.running:
         barrel.reset()
         game.lives=3
         game.score=0
+        if mute.on==True:
+            pg.mixer.music.unpause()
+
     #toggles music
     if mute.is_moused() and reticle.click:
         if mute.on==True:
