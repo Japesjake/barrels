@@ -5,15 +5,15 @@
 import pygame as pg
 import math as m
 import random as rand
-import time, os, pickle, copy
+import time, os, pickle
 #initializes game
 if True:
     os.environ['SDL_VIDEO_WINDOW_POS'] = "%d,%d" % (0,100)
     pg.init()
     pg.mixer.init()
     music=pg.mixer.music.load("background.mp3")
-    pg.mixer.music.play(-1)
-    ##fade_ms=0
+    pg.mixer.music.play(-1,fade_ms=0)
+    bam=pg.mixer.Sound('explosion.wav')
     WIDTH=800
     HEIGHT=800
     surface=pg.display.set_mode((WIDTH,HEIGHT))
@@ -177,10 +177,11 @@ while game.running:
         circle.reset()
         circle.launch=False
         game.collision=False
-    #detects collision, explodes barrel, ticks time, and increases score
+    #detects collision, explodes barrel, and increases score
     if circle.x>=barrel.x and circle.x<=barrel.x+100 and circle.y>=barrel.y and circle.y<=barrel.y+100:
         game.collision=True
         game.start=pg.time.get_ticks()
+        pg.mixer.Sound.play(bam)
         explosion=Explosion(barrel.x,barrel.y)
         barrel.reset()
         game.score+=1
