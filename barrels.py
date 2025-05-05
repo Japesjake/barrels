@@ -64,9 +64,9 @@ class Reticle:
         pg.draw.line(surface,(255,0,0),(self.x,self.y-10),(self.x,self.y+10))
         pg.draw.line(surface,(255,0,0),(self.x-10,self.y),(self.x+10,self.y))
 class Barrel:
-    def __init__(self,x,y):
-        self.x=x
-        self.y=y
+    def __init__(self):
+        self.x=rand.randint(50,WIDTH-100)
+        self.y=rand.randint(50,HEIGHT-100)
         self.image=pg.image.load("barrel.png")
         self.image=pg.transform.scale(self.image,(100,100))
     def draw(self):
@@ -122,7 +122,7 @@ class Text:
         surface.blit(self.img,(self.x,self.y))
 class Game:
     def __init__(self):
-        self.lives=100010101
+        self.lives=1
         self.collision=False
         self.running=True
         self.font=pg.font.SysFont(None,24)
@@ -147,14 +147,14 @@ class Bar:
 if True:
     reticle=Reticle(-1,-1)
     circle=Circle(200,400,reticle)
-    barrel=Barrel(300,700)
+    barrel=Barrel()
     bar=Bar()
     restart=Button("restart.png",50,50,WIDTH/2-25,HEIGHT/2-25)
     mute=Button("note.png",50,50,WIDTH-50,0)
     game=Game()
     score=Text('Score: ',YELLOW,0,HEIGHT-100,game,True,'score')
     lives=Text('Lives: ',GREEN,0,HEIGHT-50,game,True,'lives')
-    game_over=Text('Gameover',RED,WIDTH/2-50,HEIGHT/2-50,game,False)
+    game_over=Text('Gameover',RED,WIDTH/2-40,HEIGHT/2-50,game,False)
     high_score=Text('HighScore: ',YELLOW,0,0,game,True,'high_score')
     explosion=Explosion(-100,-100)
 # game.game_over=True
