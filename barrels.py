@@ -1,4 +1,6 @@
 ##Music by <a href="https://pixabay.com/users/djartmusic-46653586/?utm_source=link-attribution&utm_medium=referral&utm_campaign=music&utm_content=301284">Krzysztof Szymanski</a> from <a href="https://pixabay.com//?utm_source=link-attribution&utm_medium=referral&utm_campaign=music&utm_content=301284">Pixabay</a>
+##<a href="https://www.flaticon.com/free-icons/music" title="music icons">Music icons created by Freepik - Flaticon</a>
+##<a href="https://www.flaticon.com/free-icons/itunes" title="itunes icons">Itunes icons created by IconBaandar - Flaticon</a>
 import pygame as pg
 import math as m
 import random as rand
@@ -75,6 +77,7 @@ class Button:
         self.y=y
         self.sizex=sizex
         self.sizey=sizey
+        self.on=True
         self.image=pg.image.load(name)
         self.image=pg.transform.scale(self.image,(sizex,sizey))
     def draw(self):
@@ -115,8 +118,9 @@ class Game:
         self.font=pg.font.SysFont(None,24)
         self.game_over_font=self.font.render('Game Over',True,RED)
         self.game_over=False
-        self.score=0
+        # self.high_score=0
         self.high_score=self.load_score()
+        self.score=0
     def save_score(self):
         with open('high_score.p', 'wb') as file:
             pickle.dump(self.high_score, file)
@@ -136,6 +140,7 @@ if True:
     barrel=Barrel(300,700)
     bar=Bar()
     restart=Button("restart.png",50,50,WIDTH/2-25,HEIGHT/2-25)
+    mute=Button("note.png",50,50,WIDTH-50,0)
     game=Game()
     score=Text('Score: ',YELLOW,0,HEIGHT-100,game,True,'score')
     lives=Text('Lives: ',GREEN,0,HEIGHT-50,game,True,'lives')
@@ -149,7 +154,8 @@ while game.running:
             game.save_score()
             game.running=False
         if event.type==pg.MOUSEBUTTONDOWN:
-            circle.launch=True
+            if mute.is_moused==False:
+                circle.launch=True
             reticle.click=True
         if event.type==pg.KEYDOWN:
             if event.key==pg.K_ESCAPE:
@@ -176,6 +182,14 @@ while game.running:
         barrel.reset()
         game.lives=3
         game.score=0
+    #toggles music
+    if mute.is_moused() and reticle.click:
+        if mute.on==True:
+            pg.mixer.music.pause()
+            mute.on=False
+        else:
+            pg.mixer.music.unpause()
+            mute.on=True
     #resets click
     if reticle.click==True: 
         reticle.click=False
@@ -189,6 +203,7 @@ while game.running:
         score.draw()
         lives.draw()
         high_score.draw()
+        mute.draw()
         if game.game_over==False:
             circle.draw()
             barrel.draw()
