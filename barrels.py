@@ -37,9 +37,10 @@ class Circle:
         pg.draw.circle(surface,SILVER,(self.x,self.y),5)
     def draw(self):
         if circle.launch==True:
-            self.ret.y=HEIGHT-self.ret.y
-            self.vy=(self.ret.y-self.sy)/10
-            self.vx=(self.ret.x-self.sx)/10
+            if self.ret.click==True:
+                self.ret.y=HEIGHT-self.ret.y
+                self.vy=(self.ret.y-self.sy)/10
+                self.vx=(self.ret.x-self.sx)/10
             if self.vx>10:
                 self.vx=10
             self.t+=0.1
@@ -202,9 +203,6 @@ while game.running:
         else:
             pg.mixer.music.unpause()
             mute.on=True
-    #resets click
-    if reticle.click==True: 
-        reticle.click=False
     #saves score on game over
     if game.game_over==True:
         if game.score>game.high_score:
@@ -226,6 +224,9 @@ while game.running:
         else: 
             game_over.draw()
             restart.draw()
+    #resets click
+    if reticle.click==True: 
+        reticle.click=False
     #subtracts a life on a miss
     if game.collision==False and circle.launch==True and circle.t>80:
         game.lives-=1
