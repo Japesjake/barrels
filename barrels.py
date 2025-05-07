@@ -73,23 +73,31 @@ class Barrel:
         self.x=self.sx
         self.y=self.sy
         self.reversed=False
-        self.dx=self.sx+200
+        self.dx=self.sx+300
+        self.dy=self.sy+300
         self.image=image
-    def move(self):
-        if self.x>=self.sx and self.reversed==False:
-            self.x+=.5
-        if self.x<=self.dx+1 and self.x>=self.dx-1:
-            self.reversed=True
-        if self.reversed==True:
-            self.x-=.5
-        if self.x<=self.sx+1 and self.x>=self.sx-1:
-            self.reversed=False
-        # if self.x<=self.dx+1 and self.x>=self.dx-1 and self.reverse==False:
-        #     self.reverse=True
-        # if self.x<self.sx+1 and self.x>self.sx-1 and self.reverse==True:
-        #     self.reverse=False
+    def move(self,direction='horizontal',swap=False):
+        if direction=='horizontal':
+            if self.x>=self.sx and self.reversed==False:
+                self.x+=.5
+            if self.x<=self.dx+1 and self.x>=self.dx-1:
+                self.reversed=True
+            if self.reversed==True:
+                self.x-=.5
+            if self.x<=self.sx+1 and self.x>=self.sx-1:
+                self.reversed=False
+
+        if direction=='verticle':
+            if self.y>=self.sy and self.reversed==False:
+                self.y+=.5
+            if self.y<=self.dy+1 and self.y>=self.dy-1:
+                self.reversed=True
+            if self.reversed==True:
+                self.y-=.5
+            if self.y<=self.sy+1 and self.y>=self.sy-1:
+                self.reversed=False
+        
     def draw(self):
-        self.move()
         surface.blit(self.image,(self.x,self.y))
     def reset(self):
         self.sx=rand.randint(50,WIDTH-100)
@@ -239,6 +247,12 @@ while game.running:
         mute.draw()
         if game.game_over==False:
             circle.draw()
+            if game.score>=1:
+                barrel.move('horizontal')
+            if game.score>=2:
+                barrel.move('verticle')
+            if game.score>=3:
+                pass
             barrel.draw()
             reticle.draw()
             bar.draw()
