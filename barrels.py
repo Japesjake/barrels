@@ -86,7 +86,6 @@ class Barrel:
                 self.x-=.5
             if self.x<=self.sx+1 and self.x>=self.sx-1:
                 self.reversed=False
-
         if direction=='verticle':
             if self.y>=self.sy and self.reversed==False:
                 self.y+=.5
@@ -247,9 +246,9 @@ while game.running:
         mute.draw()
         if game.game_over==False:
             circle.draw()
-            if game.score>=1:
+            if game.score>=10:
                 barrel.move('horizontal')
-            if game.score>=2:
+            if game.score>=20:
                 barrel.move('verticle')
             if game.score>=3:
                 pass
