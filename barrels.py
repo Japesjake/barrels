@@ -24,6 +24,8 @@ if True:
     RED=(255,0,0)
     GREEN=(0,255,0)
     YELLOW=(225,225,0)
+    barrel_image=pg.image.load("barrel.png")
+    barrel_image=pg.transform.scale(barrel_image,(100,100))
 class Circle:
     def __init__(self,x,y,ret):
         self.ret=ret
@@ -65,16 +67,33 @@ class Reticle:
         pg.draw.line(surface,(255,0,0),(self.x,self.y-10),(self.x,self.y+10))
         pg.draw.line(surface,(255,0,0),(self.x-10,self.y),(self.x+10,self.y))
 class Barrel:
-    def __init__(self):
-        self.x=400
-        self.y=400
-        self.image=pg.image.load("barrel.png")
-        self.image=pg.transform.scale(self.image,(100,100))
+    def __init__(self,image):
+        self.sx=rand.randint(50,WIDTH-100)
+        self.sy=rand.randint(50,HEIGHT-100)
+        self.x=self.sx
+        self.y=self.sy
+        self.reversed=False
+        self.dx=self.sx+200
+        self.image=image
+    def move(self):
+        if self.x>=self.sx and self.reversed==False:
+            self.x+=1
+        if self.x==self.dx:
+            self.reversed=True
+        if self.reversed==True:
+            self.x-=1
+        if self.reversed==True and self.x==self.sx:
+            self.reversed=False
+        # if self.x<=self.dx+1 and self.x>=self.dx-1 and self.reverse==False:
+        #     self.reverse=True
+        # if self.x<self.sx+1 and self.x>self.sx-1 and self.reverse==True:
+        #     self.reverse=False
     def draw(self):
+        self.move()
         surface.blit(self.image,(self.x,self.y))
     def reset(self):
-        self.x=rand.randint(50,WIDTH-100)
-        self.y=rand.randint(50,HEIGHT-100)
+        self.sx=rand.randint(50,WIDTH-100)
+        self.sy=rand.randint(50,HEIGHT-100)
 class Explosion:
     def __init__(self,x,y):
         self.x=x
@@ -123,7 +142,7 @@ class Text:
         surface.blit(self.img,(self.x,self.y))
 class Game:
     def __init__(self):
-        self.lives=3
+        self.lives=10000
         self.collision=False
         self.running=True
         self.font=pg.font.SysFont(None,24)
@@ -148,7 +167,7 @@ class Bar:
 if True:
     reticle=Reticle(-1,-1)
     circle=Circle(200,400,reticle)
-    barrel=Barrel()
+    barrel=Barrel(barrel_image)
     bar=Bar()
     restart=Button("restart.png",50,50,WIDTH/2-25,HEIGHT/2-25)
     mute=Button("note.png",50,50,WIDTH-50,0)
@@ -185,7 +204,8 @@ while game.running:
         game.start=pg.time.get_ticks()
         pg.mixer.Sound.play(bam)
         explosion=Explosion(barrel.x,barrel.y)
-        barrel.reset()
+        # barrel.reset()
+        barrel=Barrel(barrel_image)
         game.score+=1
         if game.high_score<game.score:
             game.high_score=game.score
