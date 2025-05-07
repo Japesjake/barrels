@@ -77,12 +77,12 @@ class Barrel:
         self.image=image
     def move(self):
         if self.x>=self.sx and self.reversed==False:
-            self.x+=1
-        if self.x==self.dx:
+            self.x+=.5
+        if self.x<=self.dx+1 and self.x>=self.dx-1:
             self.reversed=True
         if self.reversed==True:
-            self.x-=1
-        if self.reversed==True and self.x==self.sx:
+            self.x-=.5
+        if self.x<=self.sx+1 and self.x>=self.sx-1:
             self.reversed=False
         # if self.x<=self.dx+1 and self.x>=self.dx-1 and self.reverse==False:
         #     self.reverse=True
