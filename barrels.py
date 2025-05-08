@@ -73,29 +73,54 @@ class Barrel:
         self.x=self.sx
         self.y=self.sy
         self.reversed=False
+        self.once=False
         self.dx=self.sx+300
         self.dy=self.sy+300
         self.image=image
     def move(self,direction='horizontal',swap=False):
         if direction=='horizontal':
-            if self.x>=self.sx and self.reversed==False:
-                self.x+=.5
-            if self.x<=self.dx+1 and self.x>=self.dx-1:
-                self.reversed=True
-            if self.reversed==True:
-                self.x-=.5
-            if self.x<=self.sx+1 and self.x>=self.sx-1:
-                self.reversed=False
+            if swap==False:
+                if self.x>=self.sx and self.reversed==False:
+                    self.x+=.5
+                if self.x<=self.dx+1 and self.x>=self.dx-1:
+                    self.reversed=True
+                if self.reversed==True:
+                    self.x-=.5
+                if self.x<=self.sx+1 and self.x>=self.sx-1:
+                    self.reversed=False
+            elif swap==True:
+                if self.y>=self.sy and self.reversed==False:
+                    self.y-=.5
+                if self.y<=self.dy+1 and self.y>=self.dy-1:
+                    self.reversed=True
+                if self.reversed==True:
+                    self.y+=.5
+                if self.y<=self.sy+1 and self.y>=self.sy-1:
+                    self.reversed=False
+
         if direction=='verticle':
-            if self.y>=self.sy and self.reversed==False:
-                self.y+=.5
-            if self.y<=self.dy+1 and self.y>=self.dy-1:
-                self.reversed=True
-            if self.reversed==True:
-                self.y-=.5
-            if self.y<=self.sy+1 and self.y>=self.sy-1:
-                self.reversed=False
-        
+            if swap==False:
+                if self.y>=self.sy and self.reversed==False:
+                    self.y+=.5
+                if self.y<=self.dy+1 and self.y>=self.dy-1:
+                    self.reversed=True
+                if self.reversed==True:
+                    self.y-=.5
+                if self.y<=self.sy+1 and self.y>=self.sy-1:
+                    self.reversed=False
+            elif swap==True:
+                if self.once==False:
+                    self.dy=self.sy-300
+                    self.once=True
+                if self.y<=self.sy and self.reversed==False:
+                    self.y-=.5
+                if self.y<=self.dy+1 and self.y>=self.dy-1:
+                    self.reversed=True
+                if self.reversed==True:
+                    self.y+=.5
+                if self.y<=self.sy+1 and self.y>=self.sy-1:
+                    self.reversed=False
+
     def draw(self):
         surface.blit(self.image,(self.x,self.y))
     def reset(self):
@@ -246,11 +271,11 @@ while game.running:
         mute.draw()
         if game.game_over==False:
             circle.draw()
-            if game.score>=10:
+            if game.score>=5:
                 barrel.move('horizontal')
-            if game.score>=20:
-                barrel.move('verticle')
-            if game.score>=3:
+            if game.score>=10:
+                barrel.move('verticle',swap=True)
+            if game.score>=5:
                 pass
             barrel.draw()
             reticle.draw()
