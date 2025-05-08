@@ -273,10 +273,10 @@ while game.running:
             circle.draw()
             if game.score>=5:
                 barrel.move('horizontal')
-            if game.score>=10:
+            if game.score>=10 and game.score<15:
+                barrel.move('verticle')
+            if game.score>=15:
                 barrel.move('verticle',swap=True)
-            if game.score>=5:
-                pass
             barrel.draw()
             reticle.draw()
             bar.draw()
