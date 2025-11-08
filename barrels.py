@@ -47,7 +47,7 @@ class Circle:
                 self.vx=(self.ret.x-self.sx)/10
             if self.vx>10:
                 self.vx=10
-            self.t+=0.1
+            self.t+=1
             self.x=self.sx+self.vx*self.t
             self.y=HEIGHT-self.sy+self.vy*self.t+(0.5)*self.g*self.t**2
             self.y=HEIGHT-self.y
@@ -174,7 +174,7 @@ class Text:
         surface.blit(self.img,(self.x,self.y))
 class Game:
     def __init__(self):
-        self.lives=10000
+        self.lives=5
         self.collision=False
         self.running=True
         self.font=pg.font.SysFont(None,24)
