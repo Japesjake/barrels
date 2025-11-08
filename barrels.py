@@ -6,9 +6,11 @@
 import pygame as pg
 import math as m
 import random as rand
-import time, os, pickle
+import time, os, pickle, platform
 #initializes game
 if True:
+    os_name = platform.system()
+    print('running on ', os_name)
     os.environ['SDL_VIDEO_WINDOW_POS'] = "%d,%d" % (0,50)
     pg.init()
     pg.mixer.init()
@@ -47,7 +49,9 @@ class Circle:
                 self.vx=(self.ret.x-self.sx)/10
             if self.vx>10:
                 self.vx=10
-            self.t+=1
+            if os_name == 'Windows':    
+                self.t+=.1
+            else: self.t+=10
             self.x=self.sx+self.vx*self.t
             self.y=HEIGHT-self.sy+self.vy*self.t+(0.5)*self.g*self.t**2
             self.y=HEIGHT-self.y
