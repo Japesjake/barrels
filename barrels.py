@@ -51,7 +51,7 @@ class Circle:
                 self.vx=10
             if os_name == 'Windows':    
                 self.t+=.1
-            else: self.t+=1.8
+            else: self.t+=10
             self.x=self.sx+self.vx*self.t
             self.y=HEIGHT-self.sy+self.vy*self.t+(0.5)*self.g*self.t**2
             self.y=HEIGHT-self.y
@@ -72,9 +72,6 @@ class Reticle:
         pg.draw.line(surface,(255,0,0),(self.x-10,self.y),(self.x+10,self.y))
 class Barrel:
     def __init__(self,image):
-        if os_name == 'Windows':
-            self.time_rate = .5
-        else: self.time_rate = 7
         self.sx=rand.randint(50,WIDTH-100)
         self.sy=rand.randint(50,HEIGHT-100)
         self.x=self.sx
@@ -88,31 +85,31 @@ class Barrel:
         if direction=='horizontal':
             if swap==False:
                 if self.x>=self.sx and self.reversed==False:
-                    self.x+=self.time_rate
+                    self.x+=.5
                 if self.x<=self.dx+1 and self.x>=self.dx-1:
                     self.reversed=True
                 if self.reversed==True:
-                    self.x-=self.time_rate
+                    self.x-=.5
                 if self.x<=self.sx+1 and self.x>=self.sx-1:
                     self.reversed=False
             elif swap==True:
                 if self.y>=self.sy and self.reversed==False:
-                    self.y-=self.time_rate
+                    self.y-=.5
                 if self.y<=self.dy+1 and self.y>=self.dy-1:
                     self.reversed=True
                 if self.reversed==True:
-                    self.y+=self.time_rate
+                    self.y+=.5
                 if self.y<=self.sy+1 and self.y>=self.sy-1:
                     self.reversed=False
 
         if direction=='verticle':
             if swap==False:
                 if self.y>=self.sy and self.reversed==False:
-                    self.y+=self.time_rate
+                    self.y+=.5
                 if self.y<=self.dy+1 and self.y>=self.dy-1:
                     self.reversed=True
                 if self.reversed==True:
-                    self.y-=self.time_rate
+                    self.y-=.5
                 if self.y<=self.sy+1 and self.y>=self.sy-1:
                     self.reversed=False
             elif swap==True:
@@ -120,11 +117,11 @@ class Barrel:
                     self.dy=self.sy-300
                     self.once=True
                 if self.y<=self.sy and self.reversed==False:
-                    self.y-=self.time_rate
+                    self.y-=.5
                 if self.y<=self.dy+1 and self.y>=self.dy-1:
                     self.reversed=True
                 if self.reversed==True:
-                    self.y+=self.time_rate
+                    self.y+=.5
                 if self.y<=self.sy+1 and self.y>=self.sy-1:
                     self.reversed=False
 
