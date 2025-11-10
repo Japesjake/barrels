@@ -1,1 +1,1 @@
-A physics based arcade game.
+An arcade style game made with pygame.
