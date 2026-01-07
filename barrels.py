@@ -59,12 +59,7 @@ class Circle:
         circle.y=circle.sy
         circle.t=0
         circle.launch=False
-
-class Entity():
-    def __init__(self,x,y):
-        self.x = x
-        self.y = y
-class Reticle:
+class Reticle():
     def __init__(self,x,y):
         self.x = x
         self.y = y
