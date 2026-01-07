@@ -4,13 +4,10 @@
 ##<a href="https://www.flaticon.com/free-icons/bomb" title="bomb icons">Bomb icons created by Ylivdesign - Flaticon</a>
 ####version 1.11
 import pygame as pg
-import math as m
 import random as rand
-import time, os, pickle, platform
+import os, pickle
 #initializes game
 if True:
-    os_name = platform.system()
-    print('running on ', os_name)
     os.environ['SDL_VIDEO_WINDOW_POS'] = "%d,%d" % (0,50)
     pg.init()
     pg.mixer.init()
@@ -51,9 +48,6 @@ class Circle:
                 self.vx=(self.ret.x-self.sx)/10
             if self.vx>10:
                 self.vx=10
-            # if os_name == 'Windows':
-            #     self.t+=.1
-            # else: self.t+=1.8
             self.t+= 1.8
             self.x=self.sx+self.vx*self.t
             self.y=HEIGHT-self.sy+self.vy*self.t+(0.5)*self.g*self.t**2
@@ -75,14 +69,11 @@ class Reticle:
         pg.draw.line(surface,(255,0,0),(self.x-10,self.y),(self.x+10,self.y))
 class Barrel:
     def __init__(self,image):
-        # if os_name == 'Windows':
-        #     self.time_rate = .5
-        # else: self.time_rate = 7
         self.time_rate = 7
-        self.sx=rand.randint(50,WIDTH-100)
-        self.sy=rand.randint(50,HEIGHT-100)
-        self.x=self.sx
-        self.y=self.sy
+        self.x=self.sx=rand.randint(50,WIDTH-100)
+        self.y=self.sy=rand.randint(50,HEIGHT-100)
+        # self.x=self.sx
+        # self.y=self.sy
         self.reversed=False
         self.once=False
         self.dx=self.sx+300
