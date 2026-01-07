@@ -28,6 +28,8 @@ if True:
     YELLOW=(225,225,0)
     barrel_image=pg.image.load("barrel.png")
     barrel_image=pg.transform.scale(barrel_image,(100,100))
+    clock = pg.time.Clock()
+    FPS = 60
 class Circle:
     def __init__(self,x,y,ret):
         self.ret=ret
@@ -49,9 +51,10 @@ class Circle:
                 self.vx=(self.ret.x-self.sx)/10
             if self.vx>10:
                 self.vx=10
-            if os_name == 'Windows':
-                self.t+=.1
-            else: self.t+=1.8
+            # if os_name == 'Windows':
+            #     self.t+=.1
+            # else: self.t+=1.8
+            self.t+= 1.8
             self.x=self.sx+self.vx*self.t
             self.y=HEIGHT-self.sy+self.vy*self.t+(0.5)*self.g*self.t**2
             self.y=HEIGHT-self.y
@@ -72,9 +75,10 @@ class Reticle:
         pg.draw.line(surface,(255,0,0),(self.x-10,self.y),(self.x+10,self.y))
 class Barrel:
     def __init__(self,image):
-        if os_name == 'Windows':
-            self.time_rate = .5
-        else: self.time_rate = 7
+        # if os_name == 'Windows':
+        #     self.time_rate = .5
+        # else: self.time_rate = 7
+        self.time_rate = 7
         self.sx=rand.randint(50,WIDTH-100)
         self.sy=rand.randint(50,HEIGHT-100)
         self.x=self.sx
@@ -304,5 +308,5 @@ while game.running:
             pg.mixer.music.pause()
             game_over_sound.play()
             
-    
+    clock.tick(FPS)
     pg.display.update()
