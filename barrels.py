@@ -73,9 +73,6 @@ class Barrel:
         self.x=self.sx=rand.randint(50,WIDTH-100)
         self.y=self.sy=rand.randint(50,HEIGHT-100)
         self.speedX=self.speedY=5
-        # self.once=False
-        # self.dx=self.sx+300
-        # self.dy=self.sy+300
         self.image=image
         if game.score >= 15:
             self.x = self.sx + 299
