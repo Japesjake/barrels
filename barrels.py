@@ -12,7 +12,7 @@ if True:
     pg.init()
     pg.mixer.init()
     music=pg.mixer.music.load("background.mp3")
-    pg.mixer.music.play(-1)
+    # pg.mixer.music.play(-1)
     bam=pg.mixer.Sound('explosion.wav')
     game_over_sound=pg.mixer.Sound('game_over.mp3')
     WIDTH=800
@@ -72,56 +72,19 @@ class Barrel:
         self.time_rate = 7
         self.x=self.sx=rand.randint(50,WIDTH-100)
         self.y=self.sy=rand.randint(50,HEIGHT-100)
-        # self.x=self.sx
-        # self.y=self.sy
-        self.reversed=False
-        self.once=False
-        self.dx=self.sx+300
-        self.dy=self.sy+300
+        self.speedX=self.speedY=5
+        # self.once=False
+        # self.dx=self.sx+300
+        # self.dy=self.sy+300
         self.image=image
-    def move(self,direction='horizontal',swap=False):
-        if direction=='horizontal':
-            if swap==False:
-                if self.x>=self.sx and self.reversed==False:
-                    self.x+=self.time_rate
-                if self.x<=self.dx+1 and self.x>=self.dx-1:
-                    self.reversed=True
-                if self.reversed==True:
-                    self.x-=self.time_rate
-                if self.x<=self.sx+1 and self.x>=self.sx-1:
-                    self.reversed=False
-            elif swap==True:
-                if self.y>=self.sy and self.reversed==False:
-                    self.y-=self.time_rate
-                if self.y<=self.dy+1 and self.y>=self.dy-1:
-                    self.reversed=True
-                if self.reversed==True:
-                    self.y+=self.time_rate
-                if self.y<=self.sy+1 and self.y>=self.sy-1:
-                    self.reversed=False
-
-        if direction=='verticle':
-            if swap==False:
-                if self.y>=self.sy and self.reversed==False:
-                    self.y+=self.time_rate
-                if self.y<=self.dy+1 and self.y>=self.dy-1:
-                    self.reversed=True
-                if self.reversed==True:
-                    self.y-=self.time_rate
-                if self.y<=self.sy+1 and self.y>=self.sy-1:
-                    self.reversed=False
-            elif swap==True:
-                if self.once==False:
-                    self.dy=self.sy-300
-                    self.once=True
-                if self.y<=self.sy and self.reversed==False:
-                    self.y-=self.time_rate
-                if self.y<=self.dy+1 and self.y>=self.dy-1:
-                    self.reversed=True
-                if self.reversed==True:
-                    self.y+=self.time_rate
-                if self.y<=self.sy+1 and self.y>=self.sy-1:
-                    self.reversed=False
+        if game.score >= 15:
+            self.x = self.sx + 299
+            self.speedX = -self.speedX
+    def move(self):
+        if self.x >= self.sx+300 or self.x < self.sx: self.speedX = -self.speedX
+        if game.score >= 5: self.x += self.speedX
+        if self.y >= self.sy+300 or self.y < self.sy: self.speedY = -self.speedY
+        if game.score >= 10: self.y += self.speedY
 
     def draw(self):
         surface.blit(self.image,(self.x,self.y))
@@ -176,7 +139,7 @@ class Text:
         surface.blit(self.img,(self.x,self.y))
 class Game:
     def __init__(self):
-        self.lives=5
+        self.lives=1000
         self.collision=False
         self.running=True
         self.font=pg.font.SysFont(None,24)
@@ -185,6 +148,7 @@ class Game:
         self.high_score=self.load_score()
         self.score=0
         self.start=pg.time.get_ticks()
+        self.swap = False
     def save_score(self):
         with open('high_score.p', 'wb') as file:
             pickle.dump(self.high_score, file)
@@ -201,11 +165,12 @@ class Bar:
 if True:
     reticle=Reticle(-1,-1)
     circle=Circle(200,400,reticle)
+    global game
+    game=Game()    
     barrel=Barrel(barrel_image)
     bar=Bar()
     restart=Button("restart.png",50,50,WIDTH/2-25,HEIGHT/2-25)
     mute=Button("note.png",50,50,WIDTH-50,0)
-    game=Game()
     score=Text('Score: ',YELLOW,0,HEIGHT-100,game,True,'score')
     lives=Text('Lives: ',GREEN,0,HEIGHT-50,game,True,'lives')
     game_over=Text('Gameover',RED,WIDTH/2-40,HEIGHT/2-50,game,False)
@@ -273,12 +238,7 @@ while game.running:
         mute.draw()
         if game.game_over==False:
             circle.draw()
-            if game.score>=5:
-                barrel.move('horizontal')
-            if game.score>=10 and game.score<15:
-                barrel.move('verticle')
-            if game.score>=15:
-                barrel.move('verticle',swap=True)
+            barrel.move()
             barrel.draw()
             reticle.draw()
             bar.draw()
@@ -289,8 +249,7 @@ while game.running:
             restart.draw()
     #############################################################
     #resets click
-    if reticle.click==True: 
-        reticle.click=False
+    reticle.click = False
     #subtracts a life on a miss
     if game.collision==False and circle.launch==True and circle.t>80:
         game.lives-=1
